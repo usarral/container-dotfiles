@@ -87,7 +87,10 @@ if command -v fish >/dev/null 2>&1; then
     run_as_root chsh -s "$FISH_PATH" "$(id -un)"
 fi
 
+mkdir $HOME/.config/obsidian # Avoid error obsdian config
+
 echo ""
 echo "✅ ¡Instalación completada con éxito!"
 echo "👉 La shell por defecto ahora es fish. Reinicia tu terminal o escribe: fish"
 echo "👉 Para abrir neovim: nvim"
+
