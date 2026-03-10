@@ -49,19 +49,28 @@ case $PKG_MGR in
     apt-get)
         echo "🔄 Actualizando repositorios y base..."
         run_as_root apt-get update -q
-        run_as_root apt-get install -y -q zoxide eza git bat curl wget unzip tar build-essential fish neovim bash
+        run_as_root apt-get install -y -q zoxide eza git bat curl wget unzip tar build-essential fish bash ripgrep
         mkdir -p ~/.local/bin
         ln -s /usr/bin/batcat ~/.local/bin/bat # Bugfix  
         ;;
     apk)
         echo "🔄 Actualizando repositorios y base..."
         run_as_root apk update
-        run_as_root apk add git bat curl wget eza zoxide unzip tar build-base fish neovim bash
+        run_as_root apk add git bat curl wget eza zoxide unzip tar build-base fish bash ripgrep
         ;;
     *)
-        echo "⚠️ Gestor de paquetes desconocido. Por favor, asegúrate de tener instalados: git, curl, wget, unzip, tar, fish, neovim, bash"
+        echo "⚠️ Gestor de paquetes desconocido. Por favor, asegúrate de tener instalados: git, curl, wget, unzip, tar, fish, bash, ripgrep"
         ;;
 esac
+
+# Instalar última versión de Neovim desde GitHub
+echo "📦 Instalando la última versión de Neovim..."
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+run_as_root rm -rf /opt/nvim-linux-x86_64
+run_as_root tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+rm nvim-linux-x86_64.tar.gz
+# Enlazar al binario para que esté en el PATH estándar
+run_as_root ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
 
 # Instalar Starship (si no está)
 if ! command -v starship >/dev/null 2>&1; then
