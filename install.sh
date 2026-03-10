@@ -49,12 +49,14 @@ case $PKG_MGR in
     apt-get)
         echo "🔄 Actualizando repositorios y base..."
         run_as_root apt-get update -q
-        run_as_root apt-get install -y -q zoxide eza git curl wget unzip tar build-essential fish neovim bash
+        run_as_root apt-get install -y -q zoxide eza git bat curl wget unzip tar build-essential fish neovim bash
+        mkdir -p ~/.local/bin
+        ln -s /usr/bin/batcat ~/.local/bin/bat # Bugfix  
         ;;
     apk)
         echo "🔄 Actualizando repositorios y base..."
         run_as_root apk update
-        run_as_root apk add git curl wget eza zoxide unzip tar build-base fish neovim bash
+        run_as_root apk add git bat curl wget eza zoxide unzip tar build-base fish neovim bash
         ;;
     *)
         echo "⚠️ Gestor de paquetes desconocido. Por favor, asegúrate de tener instalados: git, curl, wget, unzip, tar, fish, neovim, bash"
