@@ -22,11 +22,8 @@ return {
 			automatic_installation = true,
 		},
 	},
-	{
-		"Decodetalkers/csharpls-extended-lsp.nvim",
-		ft = { "cs" },
-	},
 	{ "mfussenegger/nvim-jdtls" },
+	require("config.languages.csharp").plugin,
 	{
 		"MeanderingProgrammer/render-markdown.nvim",
 		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },

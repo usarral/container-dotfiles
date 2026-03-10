@@ -1,5 +1,13 @@
 local M = {}
 
+M.plugin = {
+	"Decodetalkers/csharpls-extended-lsp.nvim",
+	ft = { "cs" },
+	cond = function()
+		return vim.fn.executable("csharpls") == 1 or vim.fn.executable("dotnet") == 1
+	end,
+}
+
 function M.setup()
 	local lspconfig = require("lspconfig")
 
@@ -7,8 +15,24 @@ function M.setup()
 	if vim.fn.executable("csharpls") == 1 or vim.fn.executable("dotnet") == 1 then
 		lspconfig.csharpls.setup({
 			handlers = {
-				["textDocument/definition"] = require("csharpls_extended").handler,
-				["textDocument/typeDefinition"] = require("csharpls_extended").handler,
+				["textDocument/definition"] = function(...)
+					local ok, cse = pcall(require, "csharpls_extended")
+					if ok then
+						return cse.handler(...)
+					else
+						-- Fallback al handler por defecto si el plugin falla
+						return vim.lsp.handlers["textDocument/definition"](...)
+					end
+				end,
+				["textDocument/typeDefinition"] = function(...)
+					local ok, cse = pcall(require, "csharpls_extended")
+					if ok then
+						return cse.handler(...)
+					else
+						-- Fallback al handler por defecto si el plugin falla
+						return vim.lsp.handlers["textDocument/typeDefinition"](...)
+					end
+				end,
 			},
 		})
 	end
