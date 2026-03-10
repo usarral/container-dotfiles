@@ -5,6 +5,10 @@
 
 set -e
 
+# Configuración de instalación en modo no interactivo
+export DEBIAN_FRONTEND=noninteractive
+export CI=true
+
 echo "🚀 Iniciando instalación de herramientas de desarrollo..."
 
 # Detectar el gestor de paquetes
@@ -44,8 +48,8 @@ echo "📦 Sistema detectado: $OS ($PKG_MGR)"
 case $PKG_MGR in
     apt-get)
         echo "🔄 Actualizando repositorios y base..."
-        run_as_root apt-get update
-        run_as_root apt-get install -y zoxide eza git curl wget unzip tar build-essential fish neovim bash
+        run_as_root apt-get update -q
+        run_as_root apt-get install -y -q zoxide eza git curl wget unzip tar build-essential fish neovim bash
         ;;
     apk)
         echo "🔄 Actualizando repositorios y base..."
