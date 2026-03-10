@@ -6,7 +6,7 @@ alias la='eza -a --icons' # Show all files with eza
 alias cat='bat' # Use bat instead of cat
 alias grep='rg' # Use ripgrep instead of grep
 alias vi='nvim' # Use neovim instead of vi
-alias copy='win32yank.exe -i'
+#alias copy='win32yank.exe -i'
 
 #GIT
 alias gfa='git fetch --all' # Fetch from all remotes
