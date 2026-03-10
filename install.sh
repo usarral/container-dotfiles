@@ -49,14 +49,14 @@ case $PKG_MGR in
     apt-get)
         echo "🔄 Actualizando repositorios y base..."
         run_as_root apt-get update -q
-        run_as_root apt-get install -y -q zoxide eza git bat curl wget unzip tar build-essential fish bash ripgrep nodejs npm
+        run_as_root apt-get install -y -q zoxide eza git bat curl wget unzip tar build-essential fish bash ripgrep
         mkdir -p ~/.local/bin
-        ln -s /usr/bin/batcat ~/.local/bin/bat # Bugfix  
+        ln -sf /usr/bin/batcat ~/.local/bin/bat # Bugfix  
         ;;
     apk)
         echo "🔄 Actualizando repositorios y base..."
         run_as_root apk update
-        run_as_root apk add git bat curl wget eza zoxide unzip tar build-base fish bash ripgrep nodejs npm
+        run_as_root apk add git bat curl wget eza zoxide unzip tar build-base fish bash ripgrep
         ;;
     *)
         echo "⚠️ Gestor de paquetes desconocido. Por favor, asegúrate de tener instalados: git, curl, wget, unzip, tar, fish, bash, ripgrep"
@@ -95,18 +95,27 @@ echo "💻 Arquitectura detectada: $ARCH ($MVND_ARCH)"
 mkdir -p "$HOME/.local/bin"
 mkdir -p "$HOME/.local/lib"
 
-# Node.js
-if command -v node >/dev/null 2>&1; then
+# Node.js (via fnm)
+if ! command -v fnm >/dev/null 2>&1; then
+    echo "📦 Instalando fnm (Fast Node Manager)..."
+    curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell > /dev/null 2>&1
+    export PATH="$HOME/.local/share/fnm:$PATH"
+fi
+
+if command -v fnm >/dev/null 2>&1; then
+    eval "$(fnm env --use-on-cd --shell bash)"
+    echo "🟢 Instalando Node.js 22 via fnm..."
+    fnm install 22 > /dev/null 2>&1
+    fnm default 22 > /dev/null 2>&1
+    fnm use 22 > /dev/null 2>&1
+    
     NODE_VERSION=$(node -v)
-    echo "🟢 Node.js detectado ($NODE_VERSION)"
+    echo "✅ Node.js $NODE_VERSION instalado con éxito."
+    
     if ! command -v pnpm >/dev/null 2>&1; then
         echo "📦 Instalando pnpm..."
-        if command -v npm >/dev/null 2>&1; then
-            # Intentar instalación global primero, si falla usar el script oficial
-            run_as_root npm install -g pnpm > /dev/null 2>&1 || curl -fsSL https://get.pnpm.io/install.sh | sh - > /dev/null 2>&1 || true
-        else
-            curl -fsSL https://get.pnpm.io/install.sh | sh - > /dev/null 2>&1 || true
-        fi
+        # Usar npm de fnm para instalar pnpm
+        npm install -g pnpm > /dev/null 2>&1 || curl -fsSL https://get.pnpm.io/install.sh | sh - > /dev/null 2>&1 || true
     fi
 fi
 
