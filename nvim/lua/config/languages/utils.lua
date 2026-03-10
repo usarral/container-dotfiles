@@ -11,14 +11,10 @@ function M.setup_lsp(server_name, config)
 		vim.cmd("MasonInstall " .. server_name)
 	end
 
-	-- Configurar con lspconfig (o vim.lsp.config en nvim 0.11+)
-	if vim.fn.has("nvim-0.11") == 1 and vim.lsp.config and vim.lsp.config[server_name] then
-		vim.lsp.config[server_name].setup(config or {})
-	else
-		local ok, lspconfig = pcall(require, "lspconfig")
-		if ok and lspconfig[server_name] then
-			lspconfig[server_name].setup(config or {})
-		end
+	-- Configurar con lspconfig (más robusto mientras se estabiliza la API de 0.11+)
+	local ok, lspconfig = pcall(require, "lspconfig")
+	if ok and lspconfig[server_name] then
+		lspconfig[server_name].setup(config or {})
 	end
 end
 

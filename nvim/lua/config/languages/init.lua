@@ -52,14 +52,10 @@ function M.setup()
 		"cmake",
 	}
 
-	for _, lsp in ipairs(general_lsps) do
-		if vim.fn.has("nvim-0.11") == 1 and vim.lsp.config then
-			if vim.lsp.config[lsp] then
-				vim.lsp.config[lsp].setup({})
-			end
-		else
-			local ok, lspconfig = pcall(require, "lspconfig")
-			if ok and lspconfig[lsp] then
+	local ok, lspconfig = pcall(require, "lspconfig")
+	if ok then
+		for _, lsp in ipairs(general_lsps) do
+			if lspconfig[lsp] then
 				lspconfig[lsp].setup({})
 			end
 		end
