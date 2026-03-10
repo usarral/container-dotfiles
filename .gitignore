@@ -1,0 +1,9 @@
+fish/conf.d/env.fish
+
+# Backups y referencias locales
+fish.backup.*/
+
+# Archivos temporales
+*.swp
+*:Zone.Identifier
+scripts/utils/testing/load-test-results/*

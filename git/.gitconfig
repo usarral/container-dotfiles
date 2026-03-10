@@ -1,0 +1,20 @@
+[credential]
+	credentialStore = plaintext
+	helper = store
+[user]
+	name = Carlos
+	email= 41452910+usarral@users.noreply.github.com
+[core]
+	editor = nvim
+	pager = delta
+	excludesfile = $HOME/.gitglobalignore
+[pull]
+	rebase = false
+[interactive]
+	diffFilter = delta --color-only
+[color]
+	ui = true
+[push]
+	autoSetupRemote = true
+[checkout]
+	defaultRemote = origin

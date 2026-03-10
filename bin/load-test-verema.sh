@@ -1,0 +1,1 @@
+../scripts/utils/testing/load-test-verema.sh
