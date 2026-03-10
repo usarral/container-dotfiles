@@ -67,6 +67,59 @@ if ! command -v starship >/dev/null 2>&1; then
     curl -sS https://starship.rs/install.sh | sh -s -- --yes
 fi
 
+# --- Detección de Arquitectura y Entornos ---
+echo "🔍 Detectando arquitectura y entornos de desarrollo..."
+
+# Detectar arquitectura
+ARCH=$(uname -m)
+case $ARCH in
+    x86_64)  MVND_ARCH="linux-amd64" ;;
+    aarch64|arm64) MVND_ARCH="linux-aarch64" ;;
+    *)       MVND_ARCH="unknown" ;;
+esac
+
+echo "💻 Arquitectura detectada: $ARCH ($MVND_ARCH)"
+
+# Asegurar directorios base para herramientas locales
+mkdir -p "$HOME/.local/bin"
+mkdir -p "$HOME/.local/lib"
+
+# Node.js
+if command -v node >/dev/null 2>&1; then
+    NODE_VERSION=$(node -v)
+    echo "🟢 Node.js detectado ($NODE_VERSION)"
+    if ! command -v pnpm >/dev/null 2>&1; then
+        echo "📦 Instalando pnpm..."
+        if command -v npm >/dev/null 2>&1; then
+            # Intentar instalación global primero, si falla usar el script oficial
+            run_as_root npm install -g pnpm > /dev/null 2>&1 || curl -fsSL https://get.pnpm.io/install.sh | sh - > /dev/null 2>&1 || true
+        else
+            curl -fsSL https://get.pnpm.io/install.sh | sh - > /dev/null 2>&1 || true
+        fi
+    fi
+fi
+
+# Java
+if command -v java >/dev/null 2>&1; then
+    JAVA_VERSION=$(java -version 2>&1 | awk -F '"' '/version/ {print $2}')
+    echo "🟢 Java detectado ($JAVA_VERSION)"
+    if ! command -v mvnd >/dev/null 2>&1 && [ "$MVND_ARCH" != "unknown" ]; then
+        echo "📦 Instalando mvnd (Maven Daemon) para $MVND_ARCH..."
+        MVND_VERSION="1.0.2"
+        # Download and extract mvnd
+        curl -L "https://github.com/apache/maven-mvnd/releases/download/$MVND_VERSION/maven-mvnd-$MVND_VERSION-$MVND_ARCH.tar.gz" -o /tmp/mvnd.tar.gz > /dev/null 2>&1
+        if [ $? -eq 0 ]; then
+            tar -xzf /tmp/mvnd.tar.gz -C "$HOME/.local/lib" > /dev/null 2>&1
+            # El nombre del directorio extraído suele ser maven-mvnd-VERSION-PLATFORM
+            ln -sf "$HOME/.local/lib/maven-mvnd-$MVND_VERSION-$MVND_ARCH/bin/mvnd" "$HOME/.local/bin/mvnd"
+            rm /tmp/mvnd.tar.gz
+            echo "✅ mvnd instalado en $HOME/.local/bin/mvnd"
+        else
+            echo "⚠️ No se pudo descargar mvnd para esta arquitectura."
+        fi
+    fi
+fi
+
 # Asegurar que los scripts de setup sean ejecutables
 chmod +x scripts/setup/*.sh
 
