@@ -97,4 +97,4 @@ echo ""
 echo "✅ ¡Instalación completada con éxito!"
 echo "👉 La shell por defecto ahora es fish. Reinicia tu terminal o escribe: fish"
 echo "👉 Para abrir neovim: nvim"
-
+exit 0 # Exit success for avoid errors
