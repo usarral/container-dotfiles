@@ -52,11 +52,17 @@ function M.setup()
 		"cmake",
 	}
 
-	local ok, lspconfig = pcall(require, "lspconfig")
-	if ok then
+	if vim.lsp.config then
 		for _, lsp in ipairs(general_lsps) do
-			if lspconfig[lsp] then
-				lspconfig[lsp].setup({})
+			vim.lsp.config[lsp] = {}
+		end
+	else
+		local ok, lspconfig = pcall(require, "lspconfig")
+		if ok then
+			for _, lsp in ipairs(general_lsps) do
+				if lspconfig[lsp] then
+					lspconfig[lsp].setup({})
+				end
 			end
 		end
 	end

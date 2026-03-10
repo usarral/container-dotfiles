@@ -41,10 +41,14 @@ function M.setup()
 		},
 	}
 
-	-- Usar lspconfig para la configuración (maneja el bootstrapping de forma más completa)
-	local ok, lspconfig = pcall(require, "lspconfig")
-	if ok then
-		lspconfig.lua_ls.setup(config)
+	-- Usar la nueva API de Neovim 0.11 si está disponible, si no, usar lspconfig
+	if vim.lsp.config then
+		vim.lsp.config.lua_ls = config
+	else
+		local ok, lspconfig = pcall(require, "lspconfig")
+		if ok then
+			lspconfig.lua_ls.setup(config)
+		end
 	end
 end
 
