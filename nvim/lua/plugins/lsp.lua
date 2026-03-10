@@ -18,15 +18,14 @@ return {
 	{
 		"williamboman/mason-lspconfig.nvim",
 		opts = {
-			automatic_enable = {
-				exclude = {
-					--needs external plugin
-					"jdtls",
-				},
-			},
+			ensure_installed = {}, -- Lo llenaremos dinámicamente o dejaremos que se maneje por módulo
+			automatic_installation = true,
 		},
 	},
-	{ "Decodetalkers/csharpls-extended-lsp.nvim" },
+	{
+		"Decodetalkers/csharpls-extended-lsp.nvim",
+		ft = { "cs" },
+	},
 	{ "mfussenegger/nvim-jdtls" },
 	{
 		"MeanderingProgrammer/render-markdown.nvim",

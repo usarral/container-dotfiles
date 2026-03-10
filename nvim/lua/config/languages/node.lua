@@ -1,20 +1,14 @@
 local M = {}
 
 function M.setup()
-	local lspconfig = require("lspconfig")
-
-	-- Configurar ts_ls
-	lspconfig.ts_ls.setup({
-		on_attach = function(client)
-			vim.opt.tabstop = 2
-			vim.opt.shiftwidth = 2
-			vim.opt.softtabstop = 2
-		end,
-	})
-
-	-- Otros setups específicos de Node/pnpm si los tienes
-	if vim.fn.executable("pnpm") == 1 then
-		-- Configuración especial si pnpm está presente
+	if vim.fn.executable("node") == 1 or vim.fn.executable("pnpm") == 1 then
+		require("config.languages.utils").setup_lsp("ts_ls", {
+			on_attach = function(client)
+				vim.opt.tabstop = 2
+				vim.opt.shiftwidth = 2
+				vim.opt.softtabstop = 2
+			end,
+		})
 	end
 end
 
