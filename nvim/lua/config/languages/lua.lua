@@ -41,16 +41,19 @@ function M.setup()
 		},
 	}
 
-	-- Intentar usar la nueva API de 0.11, si falla usar lspconfig tradicional
-	local status, _ = pcall(function()
-		if vim.fn.has("nvim-0.11") == 1 then
+	-- Intentar usar la nueva API de 0.11, si no, usar lspconfig tradicional
+	if vim.fn.has("nvim-0.11") == 1 then
+		if vim.lsp.config and vim.lsp.config.lua_ls then
 			vim.lsp.config.lua_ls.setup(config)
 		else
-			require("lspconfig").lua_ls.setup(config)
+			-- Si no está en vim.lsp.config, intentamos cargar lspconfig
+			-- pero solo si realmente es necesario.
+			local ok, lspconfig = pcall(require, "lspconfig")
+			if ok then
+				lspconfig.lua_ls.setup(config)
+			end
 		end
-	end)
-
-	if not status then
+	else
 		require("lspconfig").lua_ls.setup(config)
 	end
 end

@@ -12,10 +12,13 @@ function M.setup_lsp(server_name, config)
 	end
 
 	-- Configurar con lspconfig (o vim.lsp.config en nvim 0.11+)
-	if vim.fn.has("nvim-0.11") == 1 then
+	if vim.fn.has("nvim-0.11") == 1 and vim.lsp.config and vim.lsp.config[server_name] then
 		vim.lsp.config[server_name].setup(config or {})
 	else
-		require("lspconfig")[server_name].setup(config or {})
+		local ok, lspconfig = pcall(require, "lspconfig")
+		if ok and lspconfig[server_name] then
+			lspconfig[server_name].setup(config or {})
+		end
 	end
 end
 

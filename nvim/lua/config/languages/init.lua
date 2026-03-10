@@ -53,13 +53,13 @@ function M.setup()
 	}
 
 	for _, lsp in ipairs(general_lsps) do
-		if vim.fn.has("nvim-0.11") == 1 then
+		if vim.fn.has("nvim-0.11") == 1 and vim.lsp.config then
 			if vim.lsp.config[lsp] then
 				vim.lsp.config[lsp].setup({})
 			end
 		else
-			local lspconfig = require("lspconfig")
-			if lspconfig[lsp] then
+			local ok, lspconfig = pcall(require, "lspconfig")
+			if ok and lspconfig[lsp] then
 				lspconfig[lsp].setup({})
 			end
 		end
