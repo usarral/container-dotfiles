@@ -1,9 +1,7 @@
 local M = {}
 
 function M.setup()
-	local lspconfig = require("lspconfig")
-
-	lspconfig.lua_ls.setup({
+	local config = {
 		on_init = function(client)
 			if client.workspace_folders then
 				local path = client.workspace_folders[1].name
@@ -41,7 +39,13 @@ function M.setup()
 				},
 			},
 		},
-	})
+	}
+
+	if vim.fn.has("nvim-0.11") == 1 then
+		vim.lsp.config.lua_ls.setup(config)
+	else
+		require("lspconfig").lua_ls.setup(config)
+	end
 end
 
 return M

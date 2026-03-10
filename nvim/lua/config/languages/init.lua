@@ -1,8 +1,6 @@
 local M = {}
 
 function M.setup()
-	local lspconfig = require("lspconfig")
-
 	-- 1. Lenguajes ESENCIALES
 	require("config.languages.lua").setup()
 
@@ -55,8 +53,15 @@ function M.setup()
 	}
 
 	for _, lsp in ipairs(general_lsps) do
-		if lspconfig[lsp] then
-			lspconfig[lsp].setup({})
+		if vim.fn.has("nvim-0.11") == 1 then
+			if vim.lsp.config[lsp] then
+				vim.lsp.config[lsp].setup({})
+			end
+		else
+			local lspconfig = require("lspconfig")
+			if lspconfig[lsp] then
+				lspconfig[lsp].setup({})
+			end
 		end
 	end
 end
