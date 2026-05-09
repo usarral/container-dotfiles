@@ -1,0 +1,25 @@
+{
+  // Template de DevContainer para usar con DevPod + terminal (nvim)
+  // Copiá este archivo al .devcontainer/ de cada proyecto y ajustá:
+  //   - image: la imagen base del lenguaje
+  //   - DEVPOD_LANG: el/los lenguajes del proyecto (node, java, python, go, rust)
+
+  "name": "devpod-template",
+  "image": "ubuntu:22.04",
+
+  // Variable de entorno que controla qué LSPs y parsers instala Neovim
+  "containerEnv": {
+    "DEVPOD_LANG": "node"
+  },
+
+  // DevPod llama a install.sh automáticamente si está configurado como dotfiles repo.
+  // Si no, usá postCreateCommand para correrlo manualmente:
+  // "postCreateCommand": "bash /workspaces/container-dotfiles/install.sh"
+
+  // Ejemplo para Java:
+  // "image": "eclipse-temurin:21-jdk",
+  // "containerEnv": { "DEVPOD_LANG": "java" }
+
+  // Ejemplo multi-lenguaje:
+  // "containerEnv": { "DEVPOD_LANG": "node,python" }
+}

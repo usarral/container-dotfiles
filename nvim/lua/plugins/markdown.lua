@@ -1,22 +1,16 @@
 return {
-	"MeanderingProgrammer/render-markdown.nvim",
-	dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" }, -- if you use the mini.nvim suite
-	---@module 'render-markdown'
-	---@type render.md.UserConfig
-	opts = {
-		heading = {
-			enabled = true,
-			sign = true,
-			style = "full",
-			icons = { "① ", "② ", "③ ", "④ ", "⑤ ", "⑥ " },
-			left_pad = 1,
-		},
-		bullet = {
-			enabled = true,
-			icons = { "●", "○", "◆", "◇" },
-			right_pad = 1,
-			highlight = "render-markdownBullet",
+	{
+		"MeanderingProgrammer/render-markdown.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
+		ft = { "markdown" },
+		opts = {
+			file_types = { "markdown" },
+			heading = { enabled = true },
+			code = { enabled = true, sign = true },
+			dash = { enabled = true },
+			bullet = { enabled = true },
+			checkbox = { enabled = true },
+			table = { enabled = true },
 		},
 	},
 }
-
