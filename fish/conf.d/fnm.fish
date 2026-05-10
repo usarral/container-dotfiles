@@ -4,5 +4,5 @@ if test -d $HOME/.local/share/fnm
 end
 
 if command -v fnm >/dev/null
-    fnm env --use-on-cd | source
+    fnm env --use-on-cd --shell fish 2>/dev/null | source; or true
 end

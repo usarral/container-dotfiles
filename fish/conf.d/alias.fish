@@ -1,5 +1,4 @@
 # Alias config
-alias cd='z' # Use zoxide insead cd
 alias ls='eza --icons' # Use eza instead of ls
 alias ll='eza -la --icons' # Long listing with eza
 alias la='eza -a --icons' # Show all files with eza

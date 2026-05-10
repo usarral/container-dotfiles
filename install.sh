@@ -229,8 +229,8 @@ if [ -n "$LANG_LIST" ]; then
     echo "🐠 Persistiendo DEVPOD_LANG=$LANG_LIST..."
     mkdir -p "$HOME/.config/fish/conf.d"
     printf 'set -gx DEVPOD_LANG "%s"\n' "$LANG_LIST" > "$HOME/.config/fish/conf.d/devpod-lang.fish"
-    # También en ~/.profile para sesiones bash/sh (DevPod SSH)
-    printf '\nexport DEVPOD_LANG="%s"\n' "$LANG_LIST" >> "$HOME/.profile"
+    # También en ~/.bash_profile para sesiones bash login (no ~/.profile, fish lo parsea y falla)
+    printf '\nexport DEVPOD_LANG="%s"\n' "$LANG_LIST" >> "$HOME/.bash_profile"
 fi
 
 # --- Fish como shell por defecto ---
