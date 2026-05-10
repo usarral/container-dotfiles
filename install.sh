@@ -16,6 +16,14 @@ set -e
 export DEBIAN_FRONTEND=noninteractive
 export CI=true
 
+# --- Detectar arquitectura (necesario antes de cualquier descarga) ---
+ARCH=$(uname -m)
+case $ARCH in
+    x86_64)           EZA_ARCH="x86_64"; MVND_ARCH="linux-amd64"; GO_ARCH="amd64" ;;
+    aarch64|arm64)    EZA_ARCH="aarch64"; MVND_ARCH="linux-aarch64"; GO_ARCH="arm64" ;;
+    *)                EZA_ARCH="x86_64"; MVND_ARCH="unknown"; GO_ARCH="amd64" ;;
+esac
+
 # --- Parse --lang argument (overrides DEVPOD_LANG env var if provided) ---
 LANG_LIST="${DEVPOD_LANG:-}"
 
@@ -95,7 +103,6 @@ esac
 
 # --- Instalar Neovim ---
 echo "📦 Instalando la última versión de Neovim..."
-ARCH=$(uname -m)
 if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
     NVIM_ARCHIVE="nvim-linux-arm64.tar.gz"
 else
@@ -113,13 +120,6 @@ if ! command -v starship >/dev/null 2>&1; then
     echo "⭐ Instalando Starship..."
     curl -sS https://starship.rs/install.sh | sh -s -- --yes
 fi
-
-# --- Detectar arquitectura ---
-case $ARCH in
-    x86_64)           MVND_ARCH="linux-amd64" ;;
-    aarch64|arm64)    MVND_ARCH="linux-aarch64" ;;
-    *)                MVND_ARCH="unknown" ;;
-esac
 
 mkdir -p "$HOME/.local/bin" "$HOME/.local/lib"
 
@@ -183,11 +183,6 @@ if has_lang "go"; then
     if ! command -v go >/dev/null 2>&1; then
         echo "📦 Instalando Go..."
         GO_VERSION="1.23.4"
-        if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
-            GO_ARCH="arm64"
-        else
-            GO_ARCH="amd64"
-        fi
         curl -sLO "https://go.dev/dl/go${GO_VERSION}.linux-${GO_ARCH}.tar.gz"
         run_as_root rm -rf /usr/local/go
         run_as_root tar -C /usr/local -xzf "go${GO_VERSION}.linux-${GO_ARCH}.tar.gz"

@@ -47,54 +47,44 @@ return {
 			local lang = require("config.lang")
 			local caps = require("blink.cmp").get_lsp_capabilities()
 
-			local servers = {
-				lua_ls = {
-					settings = {
-						Lua = {
-							runtime = { version = "LuaJIT" },
-							workspace = { checkThirdParty = false },
-							telemetry = { enable = false },
-						},
+			-- Global capabilities for all servers
+			vim.lsp.config("*", { capabilities = caps })
+
+			-- Base server configs
+			vim.lsp.config("lua_ls", {
+				settings = {
+					Lua = {
+						runtime = { version = "LuaJIT" },
+						workspace = { checkThirdParty = false },
+						telemetry = { enable = false },
 					},
 				},
-				marksman = {},
-				bashls = {},
-				jsonls = {},
-				yamlls = {},
-				dockerls = {},
-			}
+			})
+
+			local servers = { "lua_ls", "marksman", "bashls", "jsonls", "yamlls", "dockerls" }
 
 			if lang.has("node") then
-				servers.vtsls = {
+				vim.lsp.config("vtsls", {
 					settings = {
 						typescript = { preferences = { importModuleSpecifier = "relative" } },
 					},
-				}
-				servers.eslint = {}
-				servers.tailwindcss = {}
+				})
+				vim.list_extend(servers, { "vtsls", "eslint", "tailwindcss" })
 			end
-
 			if lang.has("python") then
-				servers.pyright = {}
-				servers.ruff = {}
+				vim.list_extend(servers, { "pyright", "ruff" })
 			end
-
 			if lang.has("go") then
-				servers.gopls = {}
+				vim.list_extend(servers, { "gopls" })
 			end
-
 			if lang.has("rust") then
-				servers.rust_analyzer = {}
+				vim.list_extend(servers, { "rust_analyzer" })
 			end
-
 			if lang.has("php") then
-				servers.intelephense = {}
+				vim.list_extend(servers, { "intelephense" })
 			end
 
-			for name, config in pairs(servers) do
-				config.capabilities = caps
-				require("lspconfig")[name].setup(config)
-			end
+			vim.lsp.enable(servers)
 
 			-- Global LSP keymaps on attach
 			vim.api.nvim_create_autocmd("LspAttach", {
