@@ -1,7 +1,6 @@
 # Alias config
-alias ls='eza --icons' # Use eza instead of ls
-alias ll='eza -la --icons' # Long listing with eza
-alias la='eza -a --icons' # Show all files with eza
+alias ll='ls -la'
+alias la='ls -a'
 alias cat='bat' # Use bat instead of cat
 alias grep='rg' # Use ripgrep instead of grep
 alias vi='nvim' # Use neovim instead of vi
