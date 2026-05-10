@@ -12,7 +12,16 @@ return {
 	{
 		"folke/which-key.nvim",
 		event = "VeryLazy",
-		opts = {},
+		opts = {
+			preset = "modern",
+			spec = {
+				{ "<leader>", group = "leader" },
+				{ "g",        group = "goto" },
+				{ "]",        group = "next" },
+				{ "[",        group = "prev" },
+				{ "z",        group = "fold/spell" },
+			},
+		},
 	},
 	{
 		"ThePrimeagen/harpoon",
