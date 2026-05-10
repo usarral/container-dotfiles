@@ -236,9 +236,29 @@ fi
 
 mkdir -p "$HOME/.config/obsidian"
 
+# --- Pre-instalar LSPs via Mason (headless) ---
+# Solo para lenguajes que tienen servidores pesados que tardan en bajar la primera vez.
+if has_lang "java" || has_lang "node" || has_lang "python"; then
+    echo "📦 Pre-instalando plugins de Neovim (headless, puede tardar ~2 min)..."
+    DEVPOD_LANG="$LANG_LIST" nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
+
+    if has_lang "java"; then
+        echo "☕ Pre-instalando jdtls via Mason..."
+        DEVPOD_LANG="$LANG_LIST" nvim --headless "+MasonInstall jdtls" +qa 2>/dev/null || true
+    fi
+    if has_lang "node"; then
+        echo "🟢 Pre-instalando vtsls y eslint via Mason..."
+        DEVPOD_LANG="$LANG_LIST" nvim --headless "+MasonInstall vtsls eslint_d" +qa 2>/dev/null || true
+    fi
+    if has_lang "python"; then
+        echo "🐍 Pre-instalando pyright y ruff via Mason..."
+        DEVPOD_LANG="$LANG_LIST" nvim --headless "+MasonInstall pyright ruff" +qa 2>/dev/null || true
+    fi
+fi
+
 echo ""
 echo "✅ ¡Instalación completada con éxito!"
 echo "👉 Shell por defecto: fish. Reiniciá el terminal o escribí: fish"
 echo "👉 DEVPOD_LANG='${LANG_LIST:-}'"
-echo "👉 Abrí nvim — Mason instalará los LSPs automáticamente en el primer inicio."
+echo "👉 Abrí nvim — plugins y LSPs ya instalados."
 exit 0
