@@ -104,6 +104,13 @@ run_as_root tar -C /opt -xzf "${NVIM_ARCHIVE}"
 rm "${NVIM_ARCHIVE}"
 run_as_root ln -sf "/opt/${NVIM_DIR}/bin/nvim" /usr/local/bin/nvim
 
+# --- Ghostty terminfo (evita errores "unknown terminal: xterm-ghostty" al conectar desde Ghostty) ---
+if command -v tic >/dev/null 2>&1 && ! toe 2>/dev/null | grep -q xterm-ghostty; then
+    echo "🖥️  Instalando terminfo de Ghostty..."
+    curl -sL "https://raw.githubusercontent.com/ghostty-org/ghostty/main/src/terminfo/ghostty.terminfo" \
+        | tic -x - 2>/dev/null || true
+fi
+
 # --- Instalar Starship ---
 if ! command -v starship >/dev/null 2>&1; then
     echo "⭐ Instalando Starship..."
