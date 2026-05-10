@@ -212,13 +212,6 @@ if has_lang "rust"; then
     fi
 fi
 
-# --- Persistir DEVPOD_LANG en fish para que Neovim lo lea ---
-if [ -n "$LANG_LIST" ]; then
-    echo "🐠 Persistiendo DEVPOD_LANG=$LANG_LIST en fish..."
-    mkdir -p "$HOME/.config/fish/conf.d"
-    printf 'set -gx DEVPOD_LANG "%s"\n' "$LANG_LIST" > "$HOME/.config/fish/conf.d/devpod-lang.fish"
-fi
-
 # --- Aplicar configuraciones ---
 chmod +x scripts/setup/*.sh
 
@@ -227,6 +220,18 @@ echo "⚙️  Aplicando configuraciones..."
 ./scripts/setup/setup-git-config.sh
 ./scripts/setup/setup-starship-config.sh
 ./scripts/setup/setup-nvim-config.sh
+
+# --- Persistir DEVPOD_LANG DESPUÉS del symlink de fish ---
+# El setup-fish-config.sh crea el symlink ~/.config/fish -> dotfiles/fish
+# Hay que escribir DESPUÉS para que el archivo quede en el directorio activo.
+# También se escribe en ~/.profile para sesiones bash (DevPod SSH usa bash por defecto).
+if [ -n "$LANG_LIST" ]; then
+    echo "🐠 Persistiendo DEVPOD_LANG=$LANG_LIST..."
+    mkdir -p "$HOME/.config/fish/conf.d"
+    printf 'set -gx DEVPOD_LANG "%s"\n' "$LANG_LIST" > "$HOME/.config/fish/conf.d/devpod-lang.fish"
+    # También en ~/.profile para sesiones bash/sh (DevPod SSH)
+    printf '\nexport DEVPOD_LANG="%s"\n' "$LANG_LIST" >> "$HOME/.profile"
+fi
 
 # --- Fish como shell por defecto ---
 if command -v fish >/dev/null 2>&1; then
