@@ -250,8 +250,8 @@ echo "📦 Pre-instalando LSPs base via Mason..."
 DEVPOD_LANG="$LANG_LIST" nvim --headless "+MasonInstall lua-language-server marksman bash-language-server json-lsp yaml-language-server dockerfile-language-server-nodejs" +qa 2>/dev/null || true
 
 if has_lang "java"; then
-    echo "☕ Pre-instalando jdtls via Mason..."
-    DEVPOD_LANG="$LANG_LIST" nvim --headless "+MasonInstall jdtls" +qa 2>/dev/null || true
+    echo "☕ Pre-instalando jdtls y spring-boot-tools via Mason..."
+    DEVPOD_LANG="$LANG_LIST" nvim --headless "+MasonInstall jdtls spring-boot-tools" +qa 2>/dev/null || true
 fi
 if has_lang "node"; then
     echo "🟢 Pre-instalando vtsls y eslint via Mason..."

@@ -140,6 +140,14 @@ return {
 						config_dir = mason_path .. "/config_linux"
 					end
 
+					-- Spring Boot Tools bundles (si están instalados via Mason)
+					local spring_path = vim.fn.stdpath("data") .. "/mason/packages/spring-boot-tools"
+					local bundles = {}
+					local spring_jar = vim.fn.glob(spring_path .. "/extension/jars/spring-tools-language-server-*.jar")
+					if spring_jar ~= "" then
+						vim.list_extend(bundles, { spring_jar })
+					end
+
 					local config = {
 						cmd = {
 							"java",
@@ -157,7 +165,7 @@ return {
 						},
 						root_dir = jdtls.setup.find_root({ ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" }),
 						settings = { java = {} },
-						init_options = { bundles = {} },
+						init_options = { bundles = bundles },
 					}
 					jdtls.start_or_attach(config)
 				end,
