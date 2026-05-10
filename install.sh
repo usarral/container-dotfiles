@@ -85,7 +85,7 @@ case $PKG_MGR in
             EZA_VERSION="v0.21.0"
             EZA_ARCH=$([ "$ARCH" = "aarch64" ] && echo "aarch64" || echo "x86_64")
             curl -sL "https://github.com/eza-community/eza/releases/download/${EZA_VERSION}/eza_${EZA_ARCH}-unknown-linux-gnu.tar.gz" \
-                | tar -xz -C "$HOME/.local/bin/" eza 2>/dev/null || \
+                | tar -xz -C "$HOME/.local/bin/" ./eza 2>/dev/null || \
             run_as_root apt-get install -y -q eza 2>/dev/null || true
         fi
         ;;
