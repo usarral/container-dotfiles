@@ -243,23 +243,23 @@ fi
 mkdir -p "$HOME/.config/obsidian"
 
 # --- Pre-instalar LSPs via Mason (headless) ---
-# Solo para lenguajes que tienen servidores pesados que tardan en bajar la primera vez.
-if has_lang "java" || has_lang "node" || has_lang "python"; then
-    echo "📦 Pre-instalando plugins de Neovim (headless, puede tardar ~2 min)..."
-    DEVPOD_LANG="$LANG_LIST" nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
+echo "📦 Pre-instalando plugins de Neovim (headless, puede tardar ~2 min)..."
+DEVPOD_LANG="$LANG_LIST" nvim --headless "+Lazy! sync" +qa 2>/dev/null || true
 
-    if has_lang "java"; then
-        echo "☕ Pre-instalando jdtls via Mason..."
-        DEVPOD_LANG="$LANG_LIST" nvim --headless "+MasonInstall jdtls" +qa 2>/dev/null || true
-    fi
-    if has_lang "node"; then
-        echo "🟢 Pre-instalando vtsls y eslint via Mason..."
-        DEVPOD_LANG="$LANG_LIST" nvim --headless "+MasonInstall vtsls eslint_d" +qa 2>/dev/null || true
-    fi
-    if has_lang "python"; then
-        echo "🐍 Pre-instalando pyright y ruff via Mason..."
-        DEVPOD_LANG="$LANG_LIST" nvim --headless "+MasonInstall pyright ruff" +qa 2>/dev/null || true
-    fi
+echo "📦 Pre-instalando LSPs base via Mason..."
+DEVPOD_LANG="$LANG_LIST" nvim --headless "+MasonInstall lua-language-server marksman bash-language-server json-lsp yaml-language-server dockerfile-language-server-nodejs" +qa 2>/dev/null || true
+
+if has_lang "java"; then
+    echo "☕ Pre-instalando jdtls via Mason..."
+    DEVPOD_LANG="$LANG_LIST" nvim --headless "+MasonInstall jdtls" +qa 2>/dev/null || true
+fi
+if has_lang "node"; then
+    echo "🟢 Pre-instalando vtsls y eslint via Mason..."
+    DEVPOD_LANG="$LANG_LIST" nvim --headless "+MasonInstall vtsls eslint_d" +qa 2>/dev/null || true
+fi
+if has_lang "python"; then
+    echo "🐍 Pre-instalando pyright y ruff via Mason..."
+    DEVPOD_LANG="$LANG_LIST" nvim --headless "+MasonInstall pyright ruff" +qa 2>/dev/null || true
 fi
 
 echo ""
