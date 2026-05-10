@@ -66,14 +66,27 @@ case $PKG_MGR in
     apt-get)
         echo "🔄 Actualizando repositorios y base..."
         run_as_root apt-get update -q
-        run_as_root apt-get install -y -q zoxide eza git bat curl wget unzip tar build-essential fish bash ripgrep
+        run_as_root apt-get install -y -q zoxide git curl wget unzip tar build-essential fish bash ripgrep
+        # bat: puede estar como 'bat' o 'batcat' según la distro
+        run_as_root apt-get install -y -q bat 2>/dev/null || run_as_root apt-get install -y -q batcat 2>/dev/null || true
         mkdir -p ~/.local/bin
-        ln -sf /usr/bin/batcat ~/.local/bin/bat 2>/dev/null || true
+        ln -sf "$(command -v batcat 2>/dev/null || command -v bat)" ~/.local/bin/bat 2>/dev/null || true
+        # eza: no está en repos estándar de Debian/Ubuntu, instalar desde GitHub releases
+        if ! command -v eza >/dev/null 2>&1; then
+            echo "📦 Instalando eza desde GitHub releases..."
+            EZA_VERSION="v0.21.0"
+            EZA_ARCH=$([ "$ARCH" = "aarch64" ] && echo "aarch64" || echo "x86_64")
+            curl -sL "https://github.com/eza-community/eza/releases/download/${EZA_VERSION}/eza_${EZA_ARCH}-unknown-linux-gnu.tar.gz" \
+                | tar -xz -C "$HOME/.local/bin/" eza 2>/dev/null || \
+            run_as_root apt-get install -y -q eza 2>/dev/null || true
+        fi
         ;;
     apk)
         echo "🔄 Actualizando repositorios y base..."
         run_as_root apk update
-        run_as_root apk add git bat curl wget eza zoxide unzip tar build-base fish bash ripgrep
+        run_as_root apk add git bat curl wget zoxide unzip tar build-base fish bash ripgrep
+        # eza en Alpine
+        run_as_root apk add eza 2>/dev/null || true
         ;;
     *)
         echo "⚠️ Gestor desconocido. Asegurate de tener: git, curl, wget, unzip, fish, ripgrep"
