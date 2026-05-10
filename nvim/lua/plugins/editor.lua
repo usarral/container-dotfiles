@@ -59,4 +59,15 @@ return {
 			size = 15,
 		},
 	},
+	{
+		"folke/twilight.nvim",
+		cmd = { "Twilight", "TwilightEnable", "TwilightDisable" },
+		keys = {
+			{ "<leader>tw", "<cmd>Twilight<cr>", desc = "Twilight toggle" },
+		},
+		opts = {
+			dimming = { alpha = 0.25 },
+			context = 10,
+		},
+	},
 }

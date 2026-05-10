@@ -119,6 +119,12 @@ fi
 
 mkdir -p "$HOME/.local/bin" "$HOME/.local/lib"
 
+# --- OpenCode (AI assistant CLI) ---
+if ! command -v opencode >/dev/null 2>&1; then
+    echo "🤖 Instalando OpenCode..."
+    curl -fsSL https://opencode.ai/install | sh > /dev/null 2>&1 || true
+fi
+
 # --- Node.js (siempre, lo necesita Mason para algunos LSPs) ---
 if ! command -v fnm >/dev/null 2>&1; then
     echo "📦 Instalando fnm (Fast Node Manager)..."

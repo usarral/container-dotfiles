@@ -18,4 +18,15 @@ return {
 			},
 		},
 	},
+	{
+		"ibhagwan/fzf-lua",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		keys = {
+			{ "<leader>?",  "<cmd>FzfLua keymaps<cr>",  desc = "Keymaps" },
+			{ "<leader>P",  "<cmd>FzfLua commands<cr>", desc = "Commands" },
+			{ "<leader>H",  "<cmd>FzfLua helptags<cr>", desc = "Help tags" },
+			{ "<leader>A",  "<cmd>FzfLua autocmds<cr>", desc = "Autocmds" },
+		},
+		opts = { "default" },
+	},
 }
