@@ -30,7 +30,7 @@ return {
 				vim.list_extend(parsers, { "php" })
 			end
 
-			require("nvim-treesitter.configs").setup({
+			require("nvim-treesitter").setup({
 				ensure_installed = parsers,
 				highlight = { enable = true },
 				indent = { enable = true },
