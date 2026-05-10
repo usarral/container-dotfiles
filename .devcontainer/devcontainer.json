@@ -7,19 +7,26 @@
   "name": "devpod-template",
   "image": "ubuntu:22.04",
 
-  // Variable de entorno que controla qué LSPs y parsers instala Neovim
-  "containerEnv": {
-    "DEVPOD_LANG": "node"
-  },
+  // NOTA: la imagen base DEBE tener git instalado para que DevPod clone los dotfiles.
+  // Si usás una imagen "pura" (ubuntu, eclipse-temurin, etc.), agregá el feature de git:
+  // "features": { "ghcr.io/devcontainers/features/git:1": {} }
 
-  // DevPod llama a install.sh automáticamente si está configurado como dotfiles repo.
-  // Si no, usá postCreateCommand para correrlo manualmente:
-  // "postCreateCommand": "bash /workspaces/container-dotfiles/install.sh"
+  // --- Cómo pasar el lenguaje ---
+  // Opción 1 (recomendada): via CLI al hacer devpod up
+  //   devpod up . --dotfiles https://github.com/usarral/container-dotfiles \
+  //              --dotfiles-script install.sh \
+  //              --dotfiles-script-env DEVPOD_LANG=java
+  //
+  // Opción 2: via containerEnv (queda hardcodeado en el devcontainer.json)
+  // "containerEnv": { "DEVPOD_LANG": "node" }
 
-  // Ejemplo para Java:
-  // "image": "eclipse-temurin:21-jdk",
-  // "containerEnv": { "DEVPOD_LANG": "java" }
+  // Lenguajes soportados: node, java, python, go, rust, php
+  // Multi-lenguaje: DEVPOD_LANG=node,python
 
-  // Ejemplo multi-lenguaje:
-  // "containerEnv": { "DEVPOD_LANG": "node,python" }
+  // Ejemplos de imagen por lenguaje:
+  // Java:   "image": "eclipse-temurin:21-jdk-jammy"  + feature git
+  // Python: "image": "python:3.12-bookworm"           + feature git (opcional, ya tiene git)
+  // Go:     "image": "golang:1.23-bookworm"
+  // Rust:   "image": "rust:1-bookworm"
+  // Node:   "image": "node:22-bookworm"               (ya tiene git)
 }
