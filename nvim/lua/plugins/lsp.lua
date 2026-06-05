@@ -90,10 +90,11 @@ return {
 			vim.api.nvim_create_autocmd("LspAttach", {
 				callback = function(args)
 					local buf = args.buf
-					vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = buf, desc = "Go to definition" })
-					vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = buf, desc = "Go to declaration" })
-					vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = buf, desc = "References" })
-					vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { buffer = buf, desc = "Implementation" })
+					vim.keymap.set("n", "gd", "<cmd>FzfLua lsp_definitions     jump_to_single_result=true<cr>", { buffer = buf, desc = "Go to definition" })
+					vim.keymap.set("n", "gD", "<cmd>FzfLua lsp_declarations    jump_to_single_result=true<cr>", { buffer = buf, desc = "Go to declaration" })
+					vim.keymap.set("n", "gr", "<cmd>FzfLua lsp_references       jump_to_single_result=true<cr>", { buffer = buf, desc = "References" })
+					vim.keymap.set("n", "gi", "<cmd>FzfLua lsp_implementations  jump_to_single_result=true<cr>", { buffer = buf, desc = "Implementation" })
+					vim.keymap.set("n", "gy", "<cmd>FzfLua lsp_typedefs         jump_to_single_result=true<cr>", { buffer = buf, desc = "Type definition" })
 					vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = buf, desc = "Hover" })
 					vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, { buffer = buf, desc = "Rename" })
 					vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = buf, desc = "Code action" })
