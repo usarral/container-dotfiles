@@ -19,6 +19,7 @@ return {
 				{ "g",         group = "goto" },
 				{ "<leader>g", group = "git" },
 				{ "<leader>d", group = "docker" },
+				{ "<leader>i", group = "ai" },
 				{ "<leader>x", group = "diagnostics" },
 				{ "]",         group = "next" },
 				{ "[",         group = "prev" },
@@ -60,6 +61,7 @@ return {
 			{ [[<C-\>]],    desc = "Toggle terminal" },
 			{ "<leader>gg", desc = "Lazygit" },
 			{ "<leader>dd", desc = "Lazydocker" },
+			{ "<leader>ii", desc = "Opencode" },
 		},
 		config = function()
 			require("toggleterm").setup({
@@ -84,8 +86,16 @@ return {
 				float_opts = { border = "rounded" },
 			})
 
+			local opencode = Terminal:new({
+				cmd = "opencode",
+				hidden = true,
+				direction = "float",
+				float_opts = { border = "rounded" },
+			})
+
 			vim.keymap.set("n", "<leader>gg", function() lazygit:toggle() end, { desc = "Lazygit" })
 			vim.keymap.set("n", "<leader>dd", function() lazydocker:toggle() end, { desc = "Lazydocker" })
+			vim.keymap.set("n", "<leader>ii", function() opencode:toggle() end, { desc = "Opencode" })
 		end,
 	},
 	{
