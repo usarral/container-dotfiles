@@ -13,13 +13,16 @@ return {
 		"folke/which-key.nvim",
 		event = "VeryLazy",
 		opts = {
-			preset = "modern",
+			preset = "helix",
 			spec = {
-				{ "<leader>", group = "leader" },
-				{ "g",        group = "goto" },
-				{ "]",        group = "next" },
-				{ "[",        group = "prev" },
-				{ "z",        group = "fold/spell" },
+				{ "<leader>",  group = "leader" },
+				{ "g",         group = "goto" },
+				{ "<leader>g", group = "git" },
+				{ "<leader>d", group = "docker" },
+				{ "<leader>x", group = "diagnostics" },
+				{ "]",         group = "next" },
+				{ "[",         group = "prev" },
+				{ "z",         group = "fold/spell" },
 			},
 		},
 	},
@@ -53,11 +56,37 @@ return {
 	{
 		"akinsho/toggleterm.nvim",
 		version = "*",
-		opts = {
-			open_mapping = [[<C-\>]],
-			direction = "horizontal",
-			size = 15,
+		keys = {
+			{ [[<C-\>]],    desc = "Toggle terminal" },
+			{ "<leader>gg", desc = "Lazygit" },
+			{ "<leader>dd", desc = "Lazydocker" },
 		},
+		config = function()
+			require("toggleterm").setup({
+				open_mapping = [[<C-\>]],
+				direction = "horizontal",
+				size = 15,
+			})
+
+			local Terminal = require("toggleterm.terminal").Terminal
+
+			local lazygit = Terminal:new({
+				cmd = "lazygit",
+				hidden = true,
+				direction = "float",
+				float_opts = { border = "rounded" },
+			})
+
+			local lazydocker = Terminal:new({
+				cmd = "lazydocker",
+				hidden = true,
+				direction = "float",
+				float_opts = { border = "rounded" },
+			})
+
+			vim.keymap.set("n", "<leader>gg", function() lazygit:toggle() end, { desc = "Lazygit" })
+			vim.keymap.set("n", "<leader>dd", function() lazydocker:toggle() end, { desc = "Lazydocker" })
+		end,
 	},
 	{
 		"folke/trouble.nvim",
