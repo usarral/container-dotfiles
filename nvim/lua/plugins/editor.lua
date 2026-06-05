@@ -19,6 +19,8 @@ return {
 				{ "g",         group = "goto" },
 				{ "<leader>g", group = "git" },
 				{ "<leader>d", group = "docker" },
+				{ "<leader>a", group = "ai" },
+				{ "<leader>h", group = "harpoon" },
 				{ "<leader>x", group = "diagnostics" },
 				{ "]",         group = "next" },
 				{ "[",         group = "prev" },
@@ -33,8 +35,8 @@ return {
 		config = function()
 			local harpoon = require("harpoon")
 			harpoon:setup()
-			vim.keymap.set("n", "<leader>a", function() harpoon:list():add() end, { desc = "Harpoon add" })
-			vim.keymap.set("n", "<leader>e", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon menu" })
+			vim.keymap.set("n", "<leader>ha", function() harpoon:list():add() end, { desc = "Add file" })
+			vim.keymap.set("n", "<leader>he", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Menu" })
 			vim.keymap.set("n", "<C-h>", function() harpoon:list():select(1) end)
 			vim.keymap.set("n", "<C-j>", function() harpoon:list():select(2) end)
 			vim.keymap.set("n", "<C-k>", function() harpoon:list():select(3) end)
@@ -60,6 +62,7 @@ return {
 			{ [[<C-\>]],    desc = "Toggle terminal" },
 			{ "<leader>gg", desc = "Lazygit" },
 			{ "<leader>dd", desc = "Lazydocker" },
+			{ "<leader>ai", desc = "Opencode" },
 		},
 		config = function()
 			require("toggleterm").setup({
@@ -84,8 +87,16 @@ return {
 				float_opts = { border = "rounded" },
 			})
 
+			local opencode = Terminal:new({
+				cmd = "opencode",
+				hidden = true,
+				direction = "float",
+				float_opts = { border = "rounded" },
+			})
+
 			vim.keymap.set("n", "<leader>gg", function() lazygit:toggle() end, { desc = "Lazygit" })
 			vim.keymap.set("n", "<leader>dd", function() lazydocker:toggle() end, { desc = "Lazydocker" })
+			vim.keymap.set("n", "<leader>ai", function() opencode:toggle() end, { desc = "Opencode" })
 		end,
 	},
 	{
