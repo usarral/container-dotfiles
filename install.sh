@@ -19,9 +19,9 @@ export CI=true
 # --- Detectar arquitectura (necesario antes de cualquier descarga) ---
 ARCH=$(uname -m)
 case $ARCH in
-    x86_64)           MVND_ARCH="linux-amd64"; GO_ARCH="amd64" ;;
-    aarch64|arm64)    MVND_ARCH="linux-aarch64"; GO_ARCH="arm64" ;;
-    *)                MVND_ARCH="unknown"; GO_ARCH="amd64" ;;
+    x86_64)           MVND_ARCH="linux-amd64"; GO_ARCH="amd64"; LG_ARCH="x86_64" ;;
+    aarch64|arm64)    MVND_ARCH="linux-aarch64"; GO_ARCH="arm64"; LG_ARCH="arm64" ;;
+    *)                MVND_ARCH="unknown"; GO_ARCH="amd64"; LG_ARCH="x86_64" ;;
 esac
 
 # --- Parse --lang argument (overrides DEVPOD_LANG env var if provided) ---
@@ -123,6 +123,28 @@ mkdir -p "$HOME/.local/bin" "$HOME/.local/lib"
 if ! command -v opencode >/dev/null 2>&1; then
     echo "🤖 Instalando OpenCode..."
     curl -fsSL https://opencode.ai/install | sh > /dev/null 2>&1 || true
+fi
+
+# --- lazygit ---
+if ! command -v lazygit >/dev/null 2>&1; then
+    echo "🪄 Instalando lazygit..."
+    LG_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep '"tag_name":' | head -1 | sed -E 's/.*"v([^"]+)".*/\1/')
+    curl -sLo /tmp/lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LG_VERSION}/lazygit_${LG_VERSION}_Linux_${LG_ARCH}.tar.gz" && \
+    tar -xzf /tmp/lazygit.tar.gz -C /tmp lazygit && \
+    run_as_root install /tmp/lazygit /usr/local/bin/lazygit && \
+    echo "✅ lazygit instalado." || echo "⚠️  No se pudo instalar lazygit."
+    rm -f /tmp/lazygit.tar.gz /tmp/lazygit
+fi
+
+# --- lazydocker ---
+if ! command -v lazydocker >/dev/null 2>&1; then
+    echo "🐳 Instalando lazydocker..."
+    LD_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazydocker/releases/latest" | grep '"tag_name":' | head -1 | sed -E 's/.*"v([^"]+)".*/\1/')
+    curl -sLo /tmp/lazydocker.tar.gz "https://github.com/jesseduffield/lazydocker/releases/download/v${LD_VERSION}/lazydocker_${LD_VERSION}_Linux_${LG_ARCH}.tar.gz" && \
+    tar -xzf /tmp/lazydocker.tar.gz -C /tmp lazydocker && \
+    run_as_root install /tmp/lazydocker /usr/local/bin/lazydocker && \
+    echo "✅ lazydocker instalado." || echo "⚠️  No se pudo instalar lazydocker."
+    rm -f /tmp/lazydocker.tar.gz /tmp/lazydocker
 fi
 
 # --- Node.js (siempre, lo necesita Mason para algunos LSPs) ---
